@@ -139,7 +139,7 @@ function ISAutoGateUI.doWorldMenu(playerNum, contextMenu, worldObjects)
             local playerDistanceValid = ISAutoGateUtils.checkDistanceToGate(player, gate)
             ------------------ Use & Lock Options ------------------
             if (itemConnectedController and playerDistanceValid) then
-                local useFromGateMenu  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
+                local useFromGate  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
             end
             if not gateFrequencyCode then
                 local connectOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ConnectController"), gate, ISAutoGateUI.connectController, emptyControllers[1], player)
@@ -173,17 +173,17 @@ function ISAutoGateUI.doInventoryMenu(playerNum, contextMenu, inventoryItems)
                 local controllerFrequency = ISAutoGateUtils.getFrequency(itemInCheck)
                 if controllerFrequency then
                     ------------------ Setting variables ------------------
+                    local controller = itemInCheck
+                    local electrical = player:getPerkLevel(Perks.Electricity)
                     ---@type IsoThumpable
                     local gate = ISAutoGateUtils.getGateFromFrequency(controllerFrequency)
                     local gateExists = gate and true or false
                     ---@type InventoryItem
-                    local controller = itemInCheck
-                    local electrical = player:getPerkLevel(Perks.Electricity)
                     local emptyControllers = ISAutoGateUtils.findControllerOnPlayer(player, nil)
                     local playerDistanceValid = ISAutoGateUtils.checkDistanceToGate(player, gate)
                     ------------------ Use Controller Option ------------------
-                    local useControllerOption = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), gate, ISAutoGateUtils.toggleAutomaticGate, player)
-                    if (not gateExists) or (not playerDistanceValid) then useControllerOption.notAvailable = true end
+                    local useFromController = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), controllerFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
+                    if (not gateExists) or (not playerDistanceValid) then useFromController.notAvailable = true end
                     ------------------ Copy Controller Option ------------------
                     local copyControllerOption = contextMenu:addOption(getText("ContextMenu_AutoGate_Copy"), controller, ISAutoGateUI.copyController, emptyControllers[1], player)
                     if (electrical < 1) or (#emptyControllers < 1) then copyControllerOption.notAvailable = true end

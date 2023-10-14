@@ -290,7 +290,7 @@ function ISAutoGateUtils.connectGateController(controller, gate)
 		controller:getModData()["AutoGateFrequency_Y"] = frequency[2]
 		controller:getModData()["AutoGateFrequency_Z"] = frequency[3]
 		controller:getModData()["AutoGateFrequency_code"] = code
-		controller:setName(getText("ContextMenu_AutoGate_GateMenu") .. " - No. ".. code)
+		controller:setName(getText("IGUI_AutoGate_GateName") .. " - No. ".. code)
 		controller:setCustomName(true)
 
 		print(string.format("DEBUG: Controller connected! \nPOS: \nX: %d", frequency[1]))
