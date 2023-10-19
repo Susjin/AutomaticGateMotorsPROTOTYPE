@@ -19,7 +19,7 @@ local ISAutoGateUtils = require "AutoGate/ISAutoGateUtils"
 
 ---Predicate WeldingMask
 ---@param player IsoPlayer
-local function predicateWornWeldingMask(player)
+local function checkWornWeldingMask(player)
     local wornItems = player:getWornItems()
     for i=0, wornItems:size()-1 do
         if wornItems:getItemByIndex(i):getType() == "WeldingMask" then
@@ -33,7 +33,7 @@ end
 function ISAutoGateInstallAction:isValid()
     return self.character:isPrimaryHandItem(self.blowtorch) and
             self.character:isSecondaryHandItem(self.weldingrods) and
-            predicateWornWeldingMask(self.character) and
+            checkWornWeldingMask(self.character) and
             (self.gate:IsOpen() == false)
 end
 
@@ -110,9 +110,8 @@ function ISAutoGateInstallAction:new(character, gate, blowtorch, weldingrods)
     o.gate = gate
     o.blowtorch = blowtorch
     o.weldingrods = weldingrods
-    o.maxTime = 1000 - (character:getPerkLevel(Perks.MetalWelding) * 20)
+    o.maxTime = 1000
     if character:isTimedActionInstant() then o.maxTime = 10 end
-
     return o
 end
 

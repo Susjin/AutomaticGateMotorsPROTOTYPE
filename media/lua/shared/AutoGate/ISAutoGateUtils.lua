@@ -36,12 +36,12 @@ function ISAutoGateUtils.predicateInstallOption(player)
 end
 
 ---Check if the item still have uses left
----@param inventoryItem InventoryItem Item to be checked
+---@param drainableItem DrainableComboItem Item to be checked
 ---@param itemType String Type of the item
 ---@return boolean True if has uses left, false if not
-function ISAutoGateUtils.hasDeltaLeft(inventoryItem, itemType)
-	if inventoryItem:getType() == itemType then
-		if inventoryItem:getDelta() > 0 then
+function ISAutoGateUtils.hasDeltaLeft(drainableItem, itemType)
+	if drainableItem:getType() == itemType then
+		if drainableItem:getDelta() > 0 then
 			return true
 		end
 	end
