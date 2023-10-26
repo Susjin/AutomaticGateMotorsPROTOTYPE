@@ -60,7 +60,8 @@ function ISAutoGateUI.queueInstallAutomaticGateMotor(player, gate)
 
     local gateSquare = gateCornerObject:getSquare()
     local gateOppositeSquare = gateCornerObject:getOppositeSquare()
-    local doorSquare = gateOppositeSquare:DistTo(playerSquare) < gateSquare:DistTo(playerSquare) and gateOppositeSquare or gateSquare
+    local doorSquare = gateOppositeSquare:DistTo(playerSquare) < gateSquare:DistTo(playerSquare)
+     and gateOppositeSquare or gateSquare;
 
     ISTimedActionQueue.add(ISWalkToTimedAction:new(player, doorSquare))
     local blowtorch, weldingrods = ISAutoGateUI.checkAndEquipInstallItems(player)
@@ -87,30 +88,19 @@ function ISAutoGateUI.addOptionInstallAutomaticMotor(player, context, gate)
     if blowtorch   ~= nil then blowtorchUses = blowtorch:getDelta() end
     if weldingrods ~= nil then weldingrodsUses = weldingrods:getDelta() end
     ------------------ Adding option and tooltip ------------------
-    local installOption = context:addOption(getText("ContextMenu_AutoGate_InstallComponents"), player, ISAutoGateUI.queueInstallAutomaticGateMotor, gate)
-    if 	(metalWelding < 3) or (gateOpen) or (blowtorchUses < 0.09 ) or (weldingrodsUses < 0.08) or (weldingmask < 1) or (components < 1) then
+    local installOption = context:addOption(getText("ContextMenu_AutoGate_InstallComponents"),
+            player, ISAutoGateUI.queueInstallAutomaticGateMotor, gate)
+    if 	(metalWelding < 3) or (gateOpen) or (blowtorchUses < 0.09 ) or (weldingrodsUses < 0.08)
+            or (weldingmask < 1) or (components < 1) then
         installOption.notAvailable = true
     end
-    ISAutoGateTooltip.installGate(installOption, components, blowtorchUses, weldingrodsUses, weldingmask, metalWelding, gateOpen, gateTextureName)
+    ISAutoGateTooltip.installGate(installOption, components, blowtorchUses, weldingrodsUses,
+            weldingmask, metalWelding, gateOpen, gateTextureName)
 end
 
 function ISAutoGateUI.connectController(gate, emptyController, player)
     if ISAutoGateUtils.connectGateController(emptyController, gate) then
         HaloTextHelper.addText(player, getText("IGUI_AutoGate_ConnectControllerDone"), HaloTextHelper.getColorGreen())
-        ISInventoryPage.dirtyUI() --Refresh inventory
-    end
-end
-
-function ISAutoGateUI.copyController(controller, emptyController, player)
-    if ISAutoGateUtils.makeControllerCopy(controller, emptyController) then
-        HaloTextHelper.addText(player, getText("IGUI_AutoGate_CopyingDone"), HaloTextHelper.getColorGreen())
-        ISInventoryPage.dirtyUI() --Refresh inventory
-    end
-end
-
-function ISAutoGateUI.clearController(controller, player)
-    if ISAutoGateUtils.clearController(controller) then
-        HaloTextHelper.addText(player, getText("IGUI_AutoGate_ClearControllerDone"), HaloTextHelper.getColorGreen())
         ISInventoryPage.dirtyUI() --Refresh inventory
     end
 end
@@ -139,17 +129,18 @@ function ISAutoGateUI.doWorldMenu(playerNum, contextMenu, worldObjects)
             local playerDistanceValid = ISAutoGateUtils.checkDistanceToGate(player, gate)
             ------------------ Use & Lock Options ------------------
             if (itemConnectedController and playerDistanceValid) then
-                local useFromGate  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
+                local useFromGate  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"),
+                        gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
             end
             if not gateFrequencyCode then
-                local connectOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ConnectController"), gate, ISAutoGateUI.connectController, emptyControllers[1], player)
+                local connectOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ConnectController"),
+                        gate, ISAutoGateUI.connectController, emptyControllers[1], player)
                 if (electrical < 1) or (#emptyControllers < 1) then connectOption.notAvailable = true end
-                ISAutoGateTooltip.connectController(connectOption, #emptyControllers, electrical, gate:getTextureName())
+                ISAutoGateTooltip.connectController(connectOption, #emptyControllers, electrical,
+                        gate:getTextureName())
             end
         else
-            if ISAutoGateUtils.predicateInstallOption(player) then
-                ISAutoGateUI.addOptionInstallAutomaticMotor(player, contextMenu, gate)
-            end
+            ISAutoGateUI.addOptionInstallAutomaticMotor(player, contextMenu, gate)
         end
     end
 end
@@ -165,7 +156,7 @@ function ISAutoGateUI.doInventoryMenu(playerNum, contextMenu, inventoryItems)
         items = inventoryItems[1].items
     end
 
-    --Checking every controller on player's inventory and if it is connected
+    --Checking every controller on clicked inventory slot and if it is connected
     for i = 1, #items do
         local itemInCheck = items[i]
         if instanceof(itemInCheck, "InventoryItem") then
@@ -173,25 +164,11 @@ function ISAutoGateUI.doInventoryMenu(playerNum, contextMenu, inventoryItems)
                 local controllerFrequency = ISAutoGateUtils.getFrequency(itemInCheck)
                 if controllerFrequency then
                     ------------------ Setting variables ------------------
-                    local controller = itemInCheck
-                    local electrical = player:getPerkLevel(Perks.Electricity)
-                    ---@type IsoThumpable
                     local gate = ISAutoGateUtils.getGateFromFrequency(controllerFrequency)
-                    local gateExists = gate and true or false
-                    ---@type InventoryItem
-                    local emptyControllers = ISAutoGateUtils.findControllerOnPlayer(player, nil)
                     local playerDistanceValid = ISAutoGateUtils.checkDistanceToGate(player, gate)
                     ------------------ Use Controller Option ------------------
                     local useFromController = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), controllerFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
-                    if (not gateExists) or (not playerDistanceValid) then useFromController.notAvailable = true end
-                    ------------------ Copy Controller Option ------------------
-                    local copyControllerOption = contextMenu:addOption(getText("ContextMenu_AutoGate_Copy"), controller, ISAutoGateUI.copyController, emptyControllers[1], player)
-                    if (electrical < 1) or (#emptyControllers < 1) then copyControllerOption.notAvailable = true end
-                    ISAutoGateTooltip.copyController(copyControllerOption, #emptyControllers, electrical)
-                    ------------------ Clear Controller Option ------------------
-                    local clearControllerOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ClearController"), controller, ISAutoGateUI.clearController, player)
-                    if (electrical < 1) then clearControllerOption.notAvailable = true end
-                    ISAutoGateTooltip.clearController(clearControllerOption, electrical)
+                    if (not gate) or (not playerDistanceValid) then useFromController.notAvailable = true end
                 break
                 end
             end

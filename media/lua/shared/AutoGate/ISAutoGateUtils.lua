@@ -27,14 +27,6 @@ function ISAutoGateUtils.getWeldingRodsWithMostUses(container)
 	return container:getBestTypeEvalRecurse("Base.WeldingRods", comparatorDrainableUsesInt)
 end
 
----Check if player has blowtorch and weldingmask
----@param player IsoPlayer Player
-function ISAutoGateUtils.predicateInstallOption(player)
-	local playerInventory = player:getInventory()
-	if (playerInventory:contains("BlowTorch", true) and playerInventory:contains("WeldingMask", true)) or
-		ISBuildMenu.cheat then return true else return false end
-end
-
 ---Check if the item still have uses left
 ---@param drainableItem DrainableComboItem Item to be checked
 ---@param itemType String Type of the item
@@ -299,44 +291,6 @@ function ISAutoGateUtils.connectGateController(controller, gate)
 	end
 	return false
 end
-
----Copies the frequency from one controller to another
----@param controllerFrom InventoryItem Controller with a frequency
----@param controllerTo InventoryItem Controller without a frequency
----@return boolean Returns true if the action is successful, if not, returns false
-function ISAutoGateUtils.makeControllerCopy(controllerFrom, controllerTo)
-	local frequency = ISAutoGateUtils.getFrequency(controllerFrom)
-	if frequency then
-		controllerTo:getModData()["AutoGateFrequency_X"] = frequency[1]
-		controllerTo:getModData()["AutoGateFrequency_Y"] = frequency[2]
-		controllerTo:getModData()["AutoGateFrequency_Z"] = frequency[3]
-		controllerTo:getModData()["AutoGateFrequency_code"] = frequency[4]
-		controllerTo:setName(controllerFrom:getName())
-		controllerTo:setCustomName(true)
-		ISAutoGateUtils.debugMessage("Controller frequency copied")
-		return true
-	end
-	return false
-end
-
----Empties controller frequency, disconnecting it from the gate previously connected
----@param controller InventoryItem Controller with a frequency
----@return boolean Returns true if the action is successful, if not, returns false
-function ISAutoGateUtils.clearController(controller)
-	local frequency = ISAutoGateUtils.getFrequency(controller)
-	if not frequency then
-		return false
-	end
-	controller:getModData()["AutoGateFrequency_X"] 	  = nil
-	controller:getModData()["AutoGateFrequency_Y"] 	  = nil
-	controller:getModData()["AutoGateFrequency_Z"] 	  = nil
-	controller:getModData()["AutoGateFrequency_code"] = nil
-	controller:setName(getItemNameFromFullType("AutoGate.GateController"))
-	controller:setCustomName(false)
-	ISAutoGateUtils.debugMessage("Controller frequency cleared")
-	return true
-end
-
 
 --[[**********************************************************************************]]--
 
