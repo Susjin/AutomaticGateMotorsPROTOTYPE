@@ -3,7 +3,5 @@ ContextMenu_EN = {
 	ContextMenu_AutoGate_InstallComponents = "Install Automatic Gate Motor",
 	ContextMenu_AutoGate_ConnectController = "Connect Automatic Gate Controller",
 	ContextMenu_AutoGate_UseController = "Use Controller",
-	ContextMenu_AutoGate_Copy = "Copy Automatic Gate Frequency",
-	ContextMenu_AutoGate_ClearController = "Disconnect Automatic Gate Controller",
 
 }

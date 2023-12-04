@@ -5,11 +5,8 @@ Tooltip_EN = {
 	Tooltip_AutoGate_InstallComponentsDescription = "Gates that have a Automatic Gate Motor installed can be opened/closed remotely using a connected Automatic Gate Controller.",
 	Tooltip_AutoGate_Connecting = "Connecting Automatic Gate Controller",
 	Tooltip_AutoGate_ConnectingDescription = "Connecting a Automatic Gate Controller to this gate allows it to open/close the Gate remotely.",
-	Tooltip_AutoGate_Copy = "Copying Automatic Gate Controller",
-	Tooltip_AutoGate_CopyDescription = "Copies the frequency of the selected automatic gate controller to a disconnected controller.",
-	Tooltip_AutoGate_ClearController = "Disconnecting Automatic Gate Controller",
-	Tooltip_AutoGate_ClearControllerDescription = "Disconnects the current selected controller from a automatic gate.",
 	Tooltip_AutoGate_CantInstallFootNote = "Can't install the motor while the gate is open!"
 	Tooltip_AutoGate_GateComponents = "Install this motor on any wooden gate to open and close it through a controller.",
 	Tooltip_AutoGate_GateController = "This controller can be used to open and close connected gates with an Automatic Gate Motor installed. (Can be placed on a Belt)",
+
 }

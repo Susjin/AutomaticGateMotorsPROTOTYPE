@@ -88,10 +88,8 @@ function ISAutoGateUI.addOptionInstallAutomaticMotor(player, context, gate)
     if blowtorch   ~= nil then blowtorchUses = blowtorch:getDelta() end
     if weldingrods ~= nil then weldingrodsUses = weldingrods:getDelta() end
     ------------------ Adding option and tooltip ------------------
-    local installOption = context:addOption(getText("ContextMenu_AutoGate_InstallComponents"),
-            player, ISAutoGateUI.queueInstallAutomaticGateMotor, gate)
-    if 	(metalWelding < 3) or (gateOpen) or (blowtorchUses < 0.09 ) or (weldingrodsUses < 0.08)
-            or (weldingmask < 1) or (components < 1) then
+    local installOption = context:addOption(getText("ContextMenu_AutoGate_InstallComponents"), player, ISAutoGateUI.queueInstallAutomaticGateMotor, gate)
+    if 	(metalWelding < 3) or (gateOpen) or (blowtorchUses < 0.09 ) or (weldingrodsUses < 0.08) or (weldingmask < 1) or (components < 1) then
         installOption.notAvailable = true
     end
     ISAutoGateTooltip.installGate(installOption, components, blowtorchUses, weldingrodsUses,
@@ -128,16 +126,13 @@ function ISAutoGateUI.doWorldMenu(playerNum, contextMenu, worldObjects)
             local emptyControllers = ISAutoGateUtils.findControllerOnPlayer(player, nil)
             local playerDistanceValid = ISAutoGateUtils.checkDistanceToGate(player, gate)
             ------------------ Use & Lock Options ------------------
-            if (itemConnectedController and playerDistanceValid) then
-                local useFromGate  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"),
-                        gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
+            if (itemConnectedController and playerDistanceValid) and gateFrequencyCode then
+                local useFromGate  = contextMenu:addOptionOnTop(getText("ContextMenu_AutoGate_UseController"), gateFrequency, ISAutoGateUtils.toggleAutomaticGate, player)
             end
             if not gateFrequencyCode then
-                local connectOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ConnectController"),
-                        gate, ISAutoGateUI.connectController, emptyControllers[1], player)
+                local connectOption = contextMenu:addOption(getText("ContextMenu_AutoGate_ConnectController"), gate, ISAutoGateUI.connectController, emptyControllers[1], player)
                 if (electrical < 1) or (#emptyControllers < 1) then connectOption.notAvailable = true end
-                ISAutoGateTooltip.connectController(connectOption, #emptyControllers, electrical,
-                        gate:getTextureName())
+                ISAutoGateTooltip.connectController(connectOption, #emptyControllers, electrical, gate:getTextureName())
             end
         else
             ISAutoGateUI.addOptionInstallAutomaticMotor(player, contextMenu, gate)
