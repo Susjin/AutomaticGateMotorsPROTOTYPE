@@ -3,6 +3,6 @@ IGUI_PTBR = {
 	IGUI_AutoGate_InstallComplete = "Motor de portão automático instalado com sucesso!",
 	IGUI_AutoGate_Installing = "Instalando Motor de Portão Automático...",
 	IGUI_AutoGate_ConnectControllerDone = "Controle do portão automático conectado!",
-	IGUI_AutoGate_GateName   = "Portão Automático...",
+	IGUI_AutoGate_GateName   = "Portão Automático",
 
 }
